@@ -1,0 +1,300 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --paper: #f0f1ee;
+  --surface: #f8f8f6;
+  --surface-muted: #e7e8e5;
+  --ink: #0c0d0e;
+  --ink-muted: #42454a;
+  --ink-faint: #64686e;
+  --rule: #cdd0d1;
+  --rule-strong: #0c0d0e;
+  --brand: #2531e0;
+  --brand-soft: #dfe1fb;
+  --on-brand: #ffffff;
+  --danger: #b03a30;
+  --danger-soft: #fbeceb;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--surface-muted);
+  --secondary-foreground: var(--ink);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--ink-faint);
+  --accent: var(--surface-muted);
+  --accent-foreground: var(--ink);
+  --destructive: var(--danger);
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: var(--brand);
+  --radius: 0;
+}
+
+.dark {
+  --paper: #0c0d0f;
+  --surface: #141519;
+  --surface-muted: #1b1c21;
+  --ink: #e8e9e5;
+  --ink-muted: #a8abb0;
+  --ink-faint: #868a91;
+  --rule: #2a2c31;
+  --rule-strong: #e8e9e5;
+  --brand: #8b95ff;
+  --brand-soft: #1c1f3d;
+  --on-brand: #0c0d0f;
+  --danger: #d4675c;
+  --danger-soft: #2a1917;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-on-brand: var(--on-brand);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Unbounded', 'IBM Plex Sans', ui-sans-serif, sans-serif;
+  --font-mono: 'Martian Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --text-3xs: 0.625rem;
+  --text-3xs--line-height: 1.4;
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1.4;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.5;
+  --text-metric: clamp(2rem, 7vw, 3rem);
+  --text-metric--line-height: 1;
+  --text-metric--letter-spacing: -0.03em;
+  --text-hero: clamp(2.25rem, 8vw, 4.5rem);
+  --text-hero--line-height: 0.95;
+  --text-hero--letter-spacing: -0.03em;
+
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+
+  --shadow-2xs: 0 0 #0000;
+  --shadow-xs: 0 0 #0000;
+  --shadow-sm: 0 0 #0000;
+  --shadow-md: 0 0 #0000;
+  --shadow-lg: 0 0 #0000;
+  --shadow-xl: 0 0 #0000;
+  --shadow-2xl: 0 0 #0000;
+
+  --spacing-sidebar: 15rem;
+  --spacing-panel: 24rem;
+  --spacing-tabbar: 3.75rem;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-blink: blink 1.1s steps(1) infinite;
+  --animate-rise: rise 240ms var(--ease-out-soft) both;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--brand);
+    color: var(--on-brand);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+
+  button,
+  [role='button'],
+  a,
+  label {
+    touch-action: manipulation;
+  }
+}
+
+@layer components {
+  .label {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .numeric {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .caret {
+    display: inline-block;
+    width: 0.42em;
+    height: 0.72em;
+    margin-left: 0.08em;
+    background-color: var(--brand);
+  }
+
+  .marker {
+    display: inline-block;
+    width: 0.4rem;
+    height: 0.4rem;
+    background-color: var(--brand);
+  }
+
+  .link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: var(--rule);
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      text-decoration-color 0.15s;
+  }
+
+  .link:hover,
+  .link:focus-visible {
+    background-color: var(--brand);
+    color: var(--on-brand);
+    text-decoration-color: transparent;
+  }
+
+  .sortable-ghost {
+    opacity: 0.35;
+  }
+
+  .sortable-chosen {
+    background-color: var(--surface);
+  }
+
+  .sortable-drag,
+  .sortable-fallback {
+    outline: 1px solid var(--brand);
+    background-color: var(--surface);
+    opacity: 0.95 !important;
+  }
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility pb-sheet {
+  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
