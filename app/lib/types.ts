@@ -30,7 +30,40 @@ export interface VerificationPending {
 
 export interface Meta {
   googleClientId: string | null
-  assistantEnabled: boolean
+}
+
+export interface AiProvider {
+  isConfigured: boolean
+  baseUrl: string | null
+  modelName: string | null
+  apiKeyHint: string | null
+}
+
+export interface AiProviderInput {
+  baseUrl: string
+  modelName: string
+  apiKey?: string
+}
+
+export interface CatalogProvider {
+  id: string
+  label: string
+  baseUrl: string
+  apiKeysUrl: string
+  keyHint: string
+  defaultModel: string
+  models: string[]
+}
+
+export interface ProviderModels {
+  models: string[]
+  fetchedAt: string | null
+}
+
+export interface AiProviderCheck {
+  ok: boolean
+  code: string | null
+  message: string | null
 }
 
 export interface Project {

@@ -6,6 +6,7 @@ import LocaleSwitcher from '~/components/app/LocaleSwitcher.vue'
 import ThemeSwitcher from '~/components/app/ThemeSwitcher.vue'
 import CaretTitle from '~/components/common/CaretTitle.vue'
 import Field from '~/components/common/Field.vue'
+import AiProviderSection from '~/components/settings/AiProviderSection.vue'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -165,8 +166,10 @@ const detectTimezone = () => {
         </form>
       </section>
 
+      <AiProviderSection index="02" />
+
       <section>
-        <h2 class="label border-b border-rule-strong pb-2">02 · {{ t('settings.appearance') }}</h2>
+        <h2 class="label border-b border-rule-strong pb-2">03 · {{ t('settings.appearance') }}</h2>
         <div class="mt-5 grid gap-5 sm:grid-cols-2">
           <Field :label="t('settings.theme')">
             <ThemeSwitcher large />
@@ -190,7 +193,7 @@ const detectTimezone = () => {
       </section>
 
       <section>
-        <h2 class="label border-b border-rule-strong pb-2">03 · {{ t('settings.account') }}</h2>
+        <h2 class="label border-b border-rule-strong pb-2">04 · {{ t('settings.account') }}</h2>
         <dl class="mt-2">
           <div class="flex justify-between gap-4 border-b border-rule py-3 text-sm">
             <dt class="text-ink-muted">{{ t('auth.email') }}</dt>

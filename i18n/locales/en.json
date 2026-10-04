@@ -49,9 +49,14 @@
     "PROJECT_CODE_TAKEN": "Another project already uses this code.",
     "PROJECT_NOT_FOUND": "This project no longer exists.",
     "TASK_NOT_FOUND": "This task no longer exists.",
-    "ASSISTANT_DISABLED": "The assistant is switched off on this server.",
-    "ASSISTANT_FAILED": "The assistant could not answer. Try again.",
-    "ASSISTANT_BUSY": "The assistant is busy. Try again in a moment.",
+    "ASSISTANT_FAILED": "The model answered in a way the app could not use. Try again or pick another model.",
+    "ASSISTANT_BUSY": "The provider is rate limiting your key. Try again in a moment.",
+    "ASSISTANT_NOT_CONFIGURED": "Connect an AI provider in settings to use the assistant.",
+    "PROVIDER_KEY_REQUIRED": "Paste an API key for this provider.",
+    "PROVIDER_KEY_REJECTED": "The provider rejected the API key. Check it and save again.",
+    "PROVIDER_UNREACHABLE": "The provider could not be reached. Check the address.",
+    "PROVIDER_TIMEOUT": "The provider took too long to answer. Try again or pick a faster model.",
+    "PROVIDER_FAILED": "The provider returned an error.",
     "NETWORK": "No connection to the server.",
     "UNKNOWN": "Something went wrong. Try again."
   },
@@ -253,9 +258,10 @@
     "addAll": "Add all: {n}",
     "added": "Tasks added: {n}",
     "noDrafts": "The assistant did not find tasks in this note.",
-    "offLabel": "Switched off",
-    "offTitle": "The assistant is not configured on this server.",
-    "offHint": "Set ANTHROPIC_API_KEY in the backend environment to switch it on. Everything else works without it."
+    "offLabel": "Not connected",
+    "offTitle": "Connect an AI provider to use the assistant.",
+    "offHint": "Pick a provider in settings, paste your API key and choose a model. Everything else works without it.",
+    "offAction": "Connect in settings"
   },
   "insights": {
     "label": "Statistics",
@@ -353,15 +359,50 @@
     },
     "assistant": {
       "title": "Assistant",
-      "text": "Plan the day builds a realistic schedule inside your working hours, Tips gives advice from your recent history, and the chat proposes tasks you accept with one tap."
+      "text": "Plan the day builds a realistic schedule inside your working hours, Tips gives advice from your recent history, and the chat proposes tasks you accept with one tap. It runs on your own AI provider, connected in Settings."
     },
     "settings": {
       "title": "Settings",
-      "text": "Name, timezone, working hours, theme and language live here. You can also replay this guide."
+      "text": "Name, timezone, working hours, the AI provider with its key and model, theme and language live here. You can also replay this guide."
     },
     "done": {
       "title": "You are all set",
       "text": "Plan today, capture everything else in the inbox, and check Insights at the end of the week."
     }
+  },
+  "provider": {
+    "title": "Assistant",
+    "description": "The assistant runs on your own AI provider. Choose a provider, paste its API key and pick a model.",
+    "notConnected": "Not connected",
+    "provider": "Provider",
+    "custom": "Other, OpenAI compatible",
+    "baseUrl": "Base URL",
+    "baseUrlHint": "Address of an OpenAI compatible API, usually ending in /v1",
+    "urlInvalid": "Enter an address that starts with http:// or https://",
+    "key": "API key",
+    "keyHint": "Stored encrypted and never shown again.",
+    "keyStored": "Saved key {hint}. Leave empty to keep it.",
+    "keyRequired": "Paste the API key for this provider.",
+    "getKey": "Get a key",
+    "model": "Model",
+    "modelPlaceholder": "Choose a model",
+    "modelSearch": "Search or type a model name",
+    "modelEmpty": "Nothing found",
+    "modelUse": "Use {model}",
+    "modelRequired": "Choose a model",
+    "modelsPopular": "Popular models of this provider. After connecting you will see every model your key can reach.",
+    "modelsCustom": "Type the model name. After connecting the list comes from the provider.",
+    "modelsLoading": "Loading the models of your key",
+    "modelsUnavailable": "Could not load the list. Type the model name instead.",
+    "modelsCount": "Models available for this key: {count}",
+    "refresh": "Refresh",
+    "connect": "Connect",
+    "connected": "Provider connected",
+    "saved": "Provider saved",
+    "check": "Check",
+    "checkOk": "The provider answers, everything works",
+    "disconnect": "Disconnect",
+    "disconnected": "Provider disconnected, the key is deleted",
+    "privacy": "When you use the assistant, your tasks and projects for that request are sent to the chosen provider."
   }
 }

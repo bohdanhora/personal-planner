@@ -7,6 +7,10 @@ export const useErrorMessage = () => {
 
   return (error: unknown) => {
     if (error instanceof ApiError) {
+      if (error.code === 'PROVIDER_FAILED' && error.message) {
+        return `${t('errors.PROVIDER_FAILED')} ${error.message}`
+      }
+
       if (error.code && te(`errors.${error.code}`)) {
         return t(`errors.${error.code}`)
       }

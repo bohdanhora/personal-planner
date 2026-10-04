@@ -6,6 +6,7 @@ import {
   Lightbulb,
   LoaderCircle,
   PanelRightClose,
+  Settings2,
 } from '@lucide/vue'
 import { toast } from 'vue-sonner'
 
@@ -141,6 +142,12 @@ watch(date, () => {
         <p class="label">{{ t('assistant.offLabel') }}</p>
         <p class="mt-2 text-sm">{{ t('assistant.offTitle') }}</p>
         <p class="mt-1 text-xs text-ink-faint">{{ t('assistant.offHint') }}</p>
+        <Button as-child size="sm" variant="brand" class="mt-4">
+          <NuxtLink to="/settings#assistant" @click="ui.assistantSheetOpen = false">
+            <Settings2 />
+            {{ t('assistant.offAction') }}
+          </NuxtLink>
+        </Button>
       </div>
     </div>
 

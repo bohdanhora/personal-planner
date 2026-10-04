@@ -13,8 +13,8 @@ export const useMeta = () => {
 }
 
 export const useAssistantEnabled = () => {
-  const { data } = useMeta()
-  return computed(() => data.value?.assistantEnabled ?? false)
+  const { data } = useAiProvider()
+  return computed(() => data.value?.isConfigured ?? false)
 }
 
 export const useAssistant = () => {
