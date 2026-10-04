@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ExternalLink, LoaderCircle, RefreshCw, Unplug, Zap } from '@lucide/vue'
+import { watchDebounced } from '@vueuse/core'
 import { toast } from 'vue-sonner'
 
 import Field from '~/components/common/Field.vue'
@@ -24,7 +25,7 @@ const { t } = useI18n()
 const errorMessage = useErrorMessage()
 const provider = useAiProvider()
 const catalog = useProviderCatalog()
-const { save, remove, refreshModels, check } = useAiProviderMutations()
+const { save, remove, refreshModels, previewModels, check } = useAiProviderMutations()
 
 const form = reactive({ providerId: '', baseUrl: '', modelName: '', apiKey: '' })
 const errors = reactive<{
@@ -47,13 +48,87 @@ const connectedHere = computed(
 
 const models = useProviderModels(connectedHere)
 
+const preview = reactive<{ models: string[] | null; error: string | null; loading: boolean }>({
+  models: null,
+  error: null,
+  loading: false,
+})
+let previewRequest = 0
+
+const MIN_KEY_LENGTH = 8
+const PREVIEW_DELAY_MS = 600
+
+const isUrl = (value: string) => /^https?:\/\/\S+$/.test(value.trim())
+const typedKey = computed(() => form.apiKey.trim())
+const canPreview = computed(
+  () => isUrl(form.baseUrl) && (typedKey.value.length >= MIN_KEY_LENGTH || connectedHere.value),
+)
+
+const resetPreview = () => {
+  previewRequest += 1
+  preview.models = null
+  preview.error = null
+  preview.loading = false
+}
+
+const loadModels = async () => {
+  if (!canPreview.value) {
+    return
+  }
+
+  const request = ++previewRequest
+  preview.loading = true
+  preview.error = null
+
+  try {
+    const result = await previewModels.mutateAsync({
+      baseUrl: form.baseUrl.trim(),
+      ...(typedKey.value ? { apiKey: typedKey.value } : {}),
+    })
+    if (request === previewRequest) {
+      preview.models = result.models
+    }
+  } catch (error) {
+    if (request === previewRequest) {
+      preview.models = null
+      preview.error = errorMessage(error)
+    }
+  } finally {
+    if (request === previewRequest) {
+      preview.loading = false
+    }
+  }
+}
+
+watchDebounced(
+  () => [form.baseUrl, form.apiKey],
+  () => {
+    resetPreview()
+    if (typedKey.value.length >= MIN_KEY_LENGTH && isUrl(form.baseUrl)) {
+      void loadModels()
+    }
+  },
+  { debounce: PREVIEW_DELAY_MS },
+)
+
 const liveModels = computed(() => (connectedHere.value ? models.data.value?.models : undefined))
-const options = computed(() => liveModels.value ?? known.value?.models ?? [])
+const options = computed(() => preview.models ?? liveModels.value ?? known.value?.models ?? [])
 const modelsLoading = computed(
-  () => connectedHere.value && (models.isFetching.value || refreshModels.isPending.value),
+  () =>
+    preview.loading ||
+    (connectedHere.value && (models.isFetching.value || refreshModels.isPending.value)),
 )
 
 const modelsHint = computed(() => {
+  if (preview.loading) {
+    return t('provider.modelsLoading')
+  }
+  if (preview.error) {
+    return `${preview.error} ${t('provider.modelsManual')}`
+  }
+  if (preview.models) {
+    return t('provider.modelsCount', { count: preview.models.length })
+  }
   if (!connectedHere.value) {
     return known.value ? t('provider.modelsPopular') : t('provider.modelsCustom')
   }
@@ -118,10 +193,12 @@ const onProviderChange = (id: unknown) => {
 }
 
 const validate = () => {
-  errors.baseUrl = /^https?:\/\/\S+$/.test(form.baseUrl.trim()) ? null : t('provider.urlInvalid')
+  errors.baseUrl = isUrl(form.baseUrl) ? null : t('provider.urlInvalid')
   errors.modelName = form.modelName.trim() ? null : t('provider.modelRequired')
   errors.apiKey =
-    connectedHere.value || form.apiKey.trim().length >= 8 ? null : t('provider.keyRequired')
+    connectedHere.value || typedKey.value.length >= MIN_KEY_LENGTH
+      ? null
+      : t('provider.keyRequired')
   return !errors.baseUrl && !errors.modelName && !errors.apiKey
 }
 
@@ -139,6 +216,7 @@ const submit = async () => {
       modelName: form.modelName.trim(),
       ...(apiKey ? { apiKey } : {}),
     })
+    resetPreview()
     toast.success(wasConfigured ? t('provider.saved') : t('provider.connected'))
   } catch (error) {
     toast.error(errorMessage(error))
@@ -159,6 +237,12 @@ const runCheck = async () => {
 }
 
 const refresh = async () => {
+  if (typedKey.value || !connectedHere.value) {
+    await loadModels()
+    return
+  }
+
+  resetPreview()
   try {
     await refreshModels.mutateAsync()
   } catch (error) {
@@ -266,15 +350,20 @@ const disconnect = async () => {
         :error="errors.modelName"
         :hint="modelsHint"
       >
-        <template v-if="connectedHere" #aside>
+        <template #aside>
           <button
             type="button"
-            class="label inline-flex items-center gap-1.5 underline-offset-4 hover:text-ink hover:underline disabled:opacity-50"
-            :disabled="modelsLoading"
+            class="label inline-flex items-center gap-1.5 underline-offset-4 hover:text-ink hover:underline disabled:opacity-40 disabled:hover:no-underline"
+            :disabled="modelsLoading || !canPreview"
+            :title="canPreview ? undefined : t('provider.loadModelsHint')"
             @click="refresh"
           >
             <RefreshCw class="size-3" :class="modelsLoading && 'animate-spin'" />
-            {{ t('provider.refresh') }}
+            {{
+              preview.models || (connectedHere && !typedKey)
+                ? t('provider.refresh')
+                : t('provider.loadModels')
+            }}
           </button>
         </template>
         <ModelCombobox

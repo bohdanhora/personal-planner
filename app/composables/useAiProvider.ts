@@ -79,9 +79,14 @@ export const useAiProviderMutations = () => {
     onSuccess: (models) => queryClient.setQueryData(MODELS_KEY, models),
   })
 
+  const previewModels = useMutation({
+    mutationFn: (input: { baseUrl: string; apiKey?: string }) =>
+      api<ProviderModels>('/ai-provider/models/preview', { method: 'POST', body: input }),
+  })
+
   const check = useMutation({
     mutationFn: () => api<AiProviderCheck>('/ai-provider/check', { method: 'POST' }),
   })
 
-  return { save, remove, refreshModels, check }
+  return { save, remove, refreshModels, previewModels, check }
 }

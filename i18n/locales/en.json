@@ -53,7 +53,7 @@
     "ASSISTANT_BUSY": "The provider is rate limiting your key. Try again in a moment.",
     "ASSISTANT_NOT_CONFIGURED": "Connect an AI provider in settings to use the assistant.",
     "PROVIDER_KEY_REQUIRED": "Paste an API key for this provider.",
-    "PROVIDER_KEY_REJECTED": "The provider rejected the API key. Check it and save again.",
+    "PROVIDER_KEY_REJECTED": "The provider rejected the API key. Check that it is correct.",
     "PROVIDER_UNREACHABLE": "The provider could not be reached. Check the address.",
     "PROVIDER_TIMEOUT": "The provider took too long to answer. Try again or pick a faster model.",
     "PROVIDER_FAILED": "The provider returned an error.",
@@ -390,9 +390,9 @@
     "modelEmpty": "Nothing found",
     "modelUse": "Use {model}",
     "modelRequired": "Choose a model",
-    "modelsPopular": "Popular models of this provider. After connecting you will see every model your key can reach.",
-    "modelsCustom": "Type the model name. After connecting the list comes from the provider.",
-    "modelsLoading": "Loading the models of your key",
+    "modelsPopular": "Popular models of this provider. Paste a key and the full list loads from the provider.",
+    "modelsCustom": "Paste a key and the list loads from the provider, or type the model name.",
+    "modelsLoading": "Asking the provider for models",
     "modelsUnavailable": "Could not load the list. Type the model name instead.",
     "modelsCount": "Models available for this key: {count}",
     "refresh": "Refresh",
@@ -403,6 +403,9 @@
     "checkOk": "The provider answers, everything works",
     "disconnect": "Disconnect",
     "disconnected": "Provider disconnected, the key is deleted",
-    "privacy": "When you use the assistant, your tasks and projects for that request are sent to the chosen provider."
+    "privacy": "When you use the assistant, your tasks and projects for that request are sent to the chosen provider.",
+    "loadModels": "Load models",
+    "loadModelsHint": "Enter the API key first",
+    "modelsManual": "You can still type the model name."
   }
 }
