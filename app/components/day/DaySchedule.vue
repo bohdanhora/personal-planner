@@ -13,7 +13,7 @@ const auth = useAuthStore()
 const format = useFormat()
 const today = useToday()
 const projects = useProjectMap()
-const now = useClock()
+const nowMinutes = useNowMinutes()
 
 const timed = computed(() =>
   props.tasks
@@ -58,17 +58,6 @@ const blocks = computed(() => {
 const lanes = computed(() => Math.max(1, ...blocks.value.map((block) => block.lane + 1)))
 
 const offset = (minutes: number) => `${((minutes - range.value.from * 60) / 60) * HOUR_REM}rem`
-
-const nowMinutes = computed(() => {
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: auth.user?.timezone,
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  }).formatToParts(now.value)
-  const read = (type: string) => Number(parts.find((part) => part.type === type)?.value ?? 0)
-  return read('hour') * 60 + read('minute')
-})
 
 const showNow = computed(
   () =>

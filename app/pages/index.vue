@@ -11,6 +11,7 @@ import QuickAdd from '~/components/day/QuickAdd.vue'
 import WeekStrip from '~/components/day/WeekStrip.vue'
 import TaskList from '~/components/tasks/TaskList.vue'
 import { isDay } from '~/lib/dates'
+import { sortByTime } from '~/lib/timeline'
 import type { Task } from '~/lib/types'
 import type { AreaFilter } from '~/stores/ui'
 
@@ -20,6 +21,7 @@ const router = useRouter()
 const ui = useUiStore()
 const today = useToday()
 const format = useFormat()
+const nowMinutes = useNowMinutes()
 const projects = useProjectMap()
 const actions = useTaskActions()
 const errorMessage = useErrorMessage()
@@ -51,6 +53,7 @@ const openFilter = (task: Task) => task.status === 'OPEN' && matchesArea(task)
 const doneFilter = (task: Task) => task.status === 'DONE' && matchesArea(task)
 
 const all = computed(() => tasks.value ?? [])
+const byTime = computed(() => sortByTime(all.value))
 const openCount = computed(() => all.value.filter(openFilter).length)
 const doneCount = computed(() => all.value.filter(doneFilter).length)
 const overdueCount = computed(() => (date.value === today.value ? (overdue.value?.length ?? 0) : 0))
@@ -121,7 +124,13 @@ const carryOver = async () => {
             <h2 class="label">{{ t('day.open') }}</h2>
             <span class="label numeric">{{ openCount }}</span>
           </div>
-          <TaskList :tasks="all" :container="date" :filter="openFilter" />
+          <TaskList
+            :tasks="byTime"
+            :container="date"
+            :filter="openFilter"
+            :now="date === today ? nowMinutes : null"
+            group-untimed
+          />
           <EmptyState
             v-if="openCount === 0"
             class="mt-4"

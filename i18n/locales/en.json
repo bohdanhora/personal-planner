@@ -143,7 +143,8 @@
     "moveToday": "Move to today",
     "moveTomorrow": "Move to tomorrow",
     "moveNextDay": "Move to the next day",
-    "moveInbox": "Move to inbox"
+    "moveInbox": "Move to inbox",
+    "anyTime": "Any time"
   },
   "quickAdd": {
     "placeholder": "Add a task and press Enter",

@@ -9,6 +9,7 @@ import {
   Trash2,
 } from '@lucide/vue'
 
+import NowLine from '~/components/tasks/NowLine.vue'
 import TaskCheck from '~/components/tasks/TaskCheck.vue'
 import {
   DropdownMenu,
@@ -21,8 +22,25 @@ import { addDays } from '~/lib/dates'
 import type { Task } from '~/lib/types'
 
 const props = withDefaults(
-  defineProps<{ task: Task; draggable?: boolean; showDate?: boolean; showProject?: boolean }>(),
-  { draggable: true, showDate: false, showProject: true },
+  defineProps<{
+    task: Task
+    draggable?: boolean
+    showDate?: boolean
+    showProject?: boolean
+    now?: number | null
+    nowLine?: 'before' | 'after' | null
+    active?: boolean
+    anytimeStart?: boolean
+  }>(),
+  {
+    draggable: true,
+    showDate: false,
+    showProject: true,
+    now: null,
+    nowLine: null,
+    active: false,
+    anytimeStart: false,
+  },
 )
 
 const { t } = useI18n()
@@ -48,9 +66,26 @@ const edit = () => ui.openEditor(props.task)
 
 <template>
   <div
-    class="group/row relative flex items-start gap-1 border-b border-rule bg-background pr-2 transition-colors hover:bg-surface sm:pr-3"
+    class="group/row relative flex items-start gap-1 border-b border-rule pr-2 transition-colors sm:pr-3"
+    :class="[
+      active ? 'bg-brand-soft' : 'bg-background hover:bg-surface',
+      (nowLine === 'before' || anytimeStart) && 'mt-6 border-t',
+      nowLine === 'after' && 'mb-6',
+    ]"
     :data-task-id="task.id"
   >
+    <NowLine
+      v-if="nowLine && now !== null"
+      :minutes="now"
+      class="absolute inset-x-3"
+      :class="nowLine === 'before' ? '-top-3.5' : '-bottom-3.5'"
+    />
+    <p
+      v-else-if="anytimeStart"
+      class="pointer-events-none absolute -top-5 left-3 font-mono text-3xs tracking-wider text-ink-faint uppercase"
+    >
+      {{ t('tasks.anyTime') }}
+    </p>
     <span
       v-if="draggable"
       class="drag-handle flex h-10 w-6 shrink-0 cursor-grab touch-none items-center justify-center text-ink-faint hover:text-ink active:cursor-grabbing sm:h-12 sm:opacity-0 sm:group-hover/row:opacity-100"

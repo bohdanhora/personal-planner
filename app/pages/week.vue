@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Plus } from '@lucide/vue'
 
 import TaskList from '~/components/tasks/TaskList.vue'
 import { addDays, isDay, isoWeek, startOfWeek, weekDays } from '~/lib/dates'
+import { sortByTime } from '~/lib/timeline'
 import type { Task } from '~/lib/types'
 
 const { t } = useI18n()
@@ -12,6 +13,7 @@ const ui = useUiStore()
 const auth = useAuthStore()
 const today = useToday()
 const format = useFormat()
+const nowMinutes = useNowMinutes()
 
 const start = computed(() =>
   startOfWeek(isDay(route.query.start) ? route.query.start : today.value),
@@ -29,6 +31,7 @@ const byDay = computed(() => {
   for (const task of tasks.value ?? []) {
     if (task.date) map.get(task.date)?.push(task)
   }
+  for (const [day, list] of map) map.set(day, sortByTime(list))
   return map
 })
 
@@ -147,7 +150,13 @@ const openDay = (day: string) =>
           </div>
         </header>
         <div class="flex-1 p-1.5">
-          <TaskList :tasks="byDay.get(day) ?? []" :container="day" variant="card" />
+          <TaskList
+            :tasks="byDay.get(day) ?? []"
+            :container="day"
+            variant="card"
+            :now="day === today ? nowMinutes : null"
+            group-untimed
+          />
         </div>
         <button
           type="button"
@@ -187,7 +196,12 @@ const openDay = (day: string) =>
           </span>
         </header>
         <div class="border-t border-rule">
-          <TaskList :tasks="byDay.get(day) ?? []" :container="day" />
+          <TaskList
+            :tasks="byDay.get(day) ?? []"
+            :container="day"
+            :now="day === today ? nowMinutes : null"
+            group-untimed
+          />
         </div>
       </section>
     </div>
