@@ -5,8 +5,10 @@ import {
   Eraser,
   Lightbulb,
   LoaderCircle,
+  Mic,
   PanelRightClose,
   Settings2,
+  Square,
 } from '@lucide/vue'
 import { toast } from 'vue-sonner'
 
@@ -38,6 +40,11 @@ const plan = ref<Plan | null>(null)
 const tips = ref<Tip[] | null>(null)
 const message = ref('')
 const thread = ref<HTMLElement | null>(null)
+const speech = useSpeech(message)
+
+watch(speech.error, (code) => {
+  if (code) toast.error(t(code === 'not-allowed' ? 'voice.denied' : 'voice.failed'))
+})
 
 const scrollToEnd = () =>
   nextTick(() => thread.value?.scrollTo({ top: thread.value.scrollHeight, behavior: 'smooth' }))
@@ -65,6 +72,7 @@ const requestTips = async () => {
 }
 
 const send = async () => {
+  speech.stop()
   const content = message.value.trim()
   if (!content || assistant.chat.isPending.value) {
     return
@@ -245,11 +253,26 @@ watch(date, () => {
             v-model="message"
             rows="1"
             class="field-sizing-content max-h-40 min-h-9 flex-1 resize-none bg-transparent px-2 py-1.5 text-sm outline-none placeholder:text-ink-faint"
-            :placeholder="t('assistant.placeholder')"
+            :placeholder="
+              speech.listening.value ? t('voice.listening') : t('assistant.placeholder')
+            "
             :aria-label="t('assistant.placeholder')"
             maxlength="4000"
             @keydown="onKeydown"
           />
+          <Button
+            v-if="speech.supported"
+            type="button"
+            size="icon-sm"
+            :variant="speech.listening.value ? 'brand' : 'ghost'"
+            :aria-label="speech.listening.value ? t('voice.stop') : t('voice.start')"
+            :aria-pressed="speech.listening.value"
+            :title="speech.listening.value ? t('voice.stop') : t('voice.start')"
+            @click="speech.toggle"
+          >
+            <Square v-if="speech.listening.value" class="size-3 animate-blink fill-current" />
+            <Mic v-else />
+          </Button>
           <Button
             type="submit"
             size="icon-sm"

@@ -264,6 +264,13 @@
     "offHint": "Pick a provider in settings, paste your API key and choose a model. Everything else works without it.",
     "offAction": "Connect in settings"
   },
+  "voice": {
+    "start": "Speak",
+    "stop": "Stop listening",
+    "listening": "Listening, speak now",
+    "denied": "Microphone access is blocked. Allow it in the browser to use voice input.",
+    "failed": "Voice input failed. Try again or type instead."
+  },
   "insights": {
     "label": "Statistics",
     "range": "Range",
